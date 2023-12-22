@@ -56,7 +56,9 @@ setInterval(async function () {
       let proxys = await proxyPoolService.queryProxy(dbConfig, 1, 1, 'ORDER BY RAND()')
       let datas = await importedModule.download(proxys.length > 0 ? proxys[0] : null)
       for (const data of datas) {
-        await proxyPoolService.addProxy(dbConfig, data.ip, data.port, 'sock5', '正常')
+        try {
+          await proxyPoolService.addProxy(dbConfig, data.ip, data.port, 'sock5', '正常')
+        } catch {}
       }
     } catch (e) {
       // console.log(e)
