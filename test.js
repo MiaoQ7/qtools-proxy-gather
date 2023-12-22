@@ -4,6 +4,7 @@ const socks = require('socks')
 const fs = require('fs')
 const cheerio = require('cheerio')
 const freeproxy = require('./downloadProxy/freeproxy')
+const geonode = require('./downloadProxy/geonode')
 
 async function test01 () {
   let html = await getHtml('https://www.freeproxy.world/?type=socks5&anonymity=4&country=&speed=&port=&page=1')
@@ -47,11 +48,17 @@ async function test04 () {
   console.log(data)
 }
 
+async function test05 () {
+  let data = await geonode.download({ip:'72.37.217.3',port:'4145'})
+  console.log(data)
+}
+
+
 // test01()
 // test02()
 // test03()
-test04()
-
+// test04()
+test05()
 
 // socksProxyTest({
 //   host: '104.189.96.204',
