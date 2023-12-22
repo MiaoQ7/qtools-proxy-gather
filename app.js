@@ -57,7 +57,7 @@ setInterval(async function () {
       let datas = await importedModule.download(proxys.length > 0 ? proxys[0] : null)
       for (const data of datas) {
         try {
-          await proxyPoolService.addProxy(dbConfig, data.ip, data.port, 'sock5', '正常')
+          await proxyPoolService.addProxy(dbConfig, data.ip, data.port, 'sock5', '未知')
         } catch {}
       }
     } catch (e) {
@@ -79,7 +79,23 @@ setInterval(async function () {
   }
   console.log('check proxy start')
   runCheck = true
-  let proxys = await proxyPoolService.queryProxy(dbConfig, 1, 10, 'ORDER BY updateTime')
+
+  let proxys = await proxyPoolService.queryProxy(dbConfig, 1, 100, 'ORDER BY updateTime', '未知')
+  for (const proxy of proxys) {
+    let {status,latency} = await socksProxyTest({
+      host: proxy.ip,
+      port: parseInt(proxy.port),
+      type: 5
+    })
+    if (status === 'success') {
+      console.log(`socks5://${proxy.ip}:${proxy.port} is useful. Latency: ${latency} ms`)
+      await proxyPoolService.updateProxy(dbConfig, proxy.id, '正常')
+    } else {
+      await proxyPoolService.deleteProxy(dbConfig, proxy.id)
+    }
+  }
+
+  proxys = await proxyPoolService.queryProxy(dbConfig, 1, 100, 'ORDER BY updateTime', '正常')
   for (const proxy of proxys) {
     let {status,latency} = await socksProxyTest({
       host: proxy.ip,

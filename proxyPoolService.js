@@ -35,11 +35,11 @@ module.exports = {
     }
   },
 
-  async queryProxy(dbConfig, page, pageSize, order = 'ORDER BY updateTime DESC') {
+  async queryProxy(dbConfig, page, pageSize, order = 'ORDER BY updateTime DESC', status = '正常') {
     let mysqlTool = new MysqlTool(dbConfig);
     try {
       await mysqlTool.connect()
-      const results = await mysqlTool.query(`SELECT * FROM proxy WHERE status='正常' ${order} limit ?,?`,[(page-1)*pageSize, pageSize]);
+      const results = await mysqlTool.query(`SELECT * FROM proxy WHERE status=? ${order} limit ?,?`,[status, (page-1)*pageSize, pageSize]);
       return results.map(e => ({...e}))
     } finally {
       await mysqlTool.close()
