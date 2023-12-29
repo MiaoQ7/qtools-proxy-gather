@@ -36,7 +36,7 @@ async function test03 () {
       port: parseInt(proxy.port),
       type: 5
     })
-    // console.log(result)
+    console.log(result)
     if (result.status == 'success') {
       usefulProxy.push({...proxy, latency: result.latency})
     }
@@ -56,9 +56,9 @@ async function test05 () {
 
 // test01()
 // test02()
-// test03()
+test03()
 // test04()
-test05()
+// test05()
 
 // socksProxyTest({
 //   host: '104.189.96.204',

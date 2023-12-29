@@ -127,6 +127,14 @@ const server = http.createServer(async (req, res) => {
         let result = await proxyPoolService.queryProxy(dbConfig, 1, 10, 'ORDER BY RAND()')
         text = JSON.stringify({code: 0, data: result, message: 'success'})
       }
+      if (parsedUrl.pathname == '/ss/list') {
+        text = JSON.stringify({code: 0, data: {
+          ip: 'qq.miaomiao.press',
+          port: 8860,
+          password: '123456',
+          encrypt: 'none'
+        }, message: 'success'})
+      }
       // if (parsedUrl.pathname == '/add') {
       //   await proxyPoolService.addProxy(dbConfig, '192.168.1.1', '8888', 'sock5', '未知')
       // }
